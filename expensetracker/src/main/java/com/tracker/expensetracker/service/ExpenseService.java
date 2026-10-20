@@ -7,6 +7,9 @@ import com.tracker.expensetracker.model.Category;
 import com.tracker.expensetracker.model.Expense;
 import com.tracker.expensetracker.model.User;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 @Service
 public class ExpenseService {
@@ -42,6 +45,14 @@ public class ExpenseService {
                 expenseDetails.setCategory(category);
 
                 return expenseRepository.save(expenseDetails);
+    }
+    public List<Expense> getExpensesByDateRange(Long userId, LocalDate startDate, LocalDate endDate) {
+        return expenseRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
+}
+
+    public BigDecimal getTotalSpending(Long userId) {
+        BigDecimal total = expenseRepository.getTotalAmountByUserId(userId);
+        return total != null ? total : BigDecimal.ZERO;
     }
 
 }

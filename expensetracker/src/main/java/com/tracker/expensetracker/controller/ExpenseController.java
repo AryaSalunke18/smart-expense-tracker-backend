@@ -4,7 +4,8 @@ import com.tracker.expensetracker.model.Expense;
 import com.tracker.expensetracker.service.ExpenseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController 
@@ -29,6 +30,21 @@ public class ExpenseController {
     public ResponseEntity<Expense> addExpense(@RequestParam Long userId,@RequestParam Long categoryId,@RequestBody Expense expense){
         Expense savedExpense=expenseService.addExpense(userId,categoryId,expense);
         return ResponseEntity.ok(savedExpense);
+    }
+
+    @GetMapping("/user/{userId}/filter")
+    public ResponseEntity<List<Expense>> getExpensesByDateRange(
+            @PathVariable Long userId,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate) {
+        List<Expense> expenses = expenseService.getExpensesByDateRange(userId, startDate, endDate);
+        return ResponseEntity.ok(expenses);
+    }
+    
+    @GetMapping("/user/{userId}/total")
+    public ResponseEntity<BigDecimal> getTotalSpending(@PathVariable Long userId) {
+        BigDecimal total = expenseService.getTotalSpending(userId);
+        return ResponseEntity.ok(total);
     }
  
 
